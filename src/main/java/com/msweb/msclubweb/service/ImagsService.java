@@ -9,5 +9,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-07-07 09:26:00
 */
 public interface ImagsService extends IService<Imags> {
-
+    int addImg(Imags imags);
 }

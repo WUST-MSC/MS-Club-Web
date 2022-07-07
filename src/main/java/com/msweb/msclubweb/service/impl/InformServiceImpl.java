@@ -29,10 +29,10 @@ public class InformServiceImpl extends ServiceImpl<InformMapper, Inform>
     @Override
     public int addInform(Inform inform) {
         //校验信息不为空
-        String title = inform.getTitle();
+        /*String title = inform.getTitle();
         if (title == null || title.length() == 0) return 400;
         String introduction = inform.getIntroduction();
-        if (introduction == null || introduction.length() == 0) return 400;
+        if (introduction == null || introduction.length() == 0) return 400;*/
         Date date = new Date();
         //封装时间数据
         inform.setTime(date);

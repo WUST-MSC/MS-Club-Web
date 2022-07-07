@@ -30,7 +30,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
                 department.getEmail()==null || department.getEmail().length()==0 ||
                 department.getName()==null || department.getName().length()==0 )
             return 400;
-        //检验数据是否合法
+        //检验数据是否合法   ---听说前端做格式判断更加方便
         //1.qq不能包含非数字
         String qq = department.getQq();
         char[] chars = qq.toCharArray();
@@ -56,8 +56,9 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
 
     @Override
     public int updateInfo(Department department) {
-        departmentMapper.updateById(department);
-        return 0;
+        int i = departmentMapper.updateById(department);
+        if(i==1) return 200;
+        else return 500;
     }
 
     @Override

@@ -12,12 +12,12 @@ import java.util.Map;
 */
 //部门管理
 public interface DepartmentService extends IService<Department> {
-    //添加
+    //1.添加，写着以后可以添加队内容的合理性判断
     int addDepartment(Department department);
-    //删除通过name（换届）
+    //2.删除通过name（换届）应该不会有两届同名同姓吧awa
     int deleteByName(String name);
-    //修改（部门管理信息更改）
+    //3.修改（部门管理信息更改）写着以后可以添加队内容的合理性判断
     int updateInfo(Department department);
-    //查找（通过flag）
+    //4.查找（通过flag表示各个部门）
     Map<String,Object> selectByFlag(int flag);
 }
