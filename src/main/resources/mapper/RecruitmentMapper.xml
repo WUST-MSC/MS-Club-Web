@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.msweb.msclubweb.mapper.RecruitmentMapper">
+
+    <resultMap id="BaseResultMap" type="com.msweb.msclubweb.domain.Recruitment">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="studentId" column="student_id" jdbcType="CHAR"/>
+            <result property="phone" column="phone" jdbcType="CHAR"/>
+            <result property="qq" column="qq" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="interestDepartment" column="interest_department" jdbcType="INTEGER"/>
+            <result property="classname" column="classname" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,student_id,
+        phone,qq,email,
+        interest_department,classname
+    </sql>
+</mapper>
