@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.msweb.msclubweb.domain.Inform;
 import com.msweb.msclubweb.service.InformService;
 import com.msweb.msclubweb.mapper.InformMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,7 +15,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class InformServiceImpl extends ServiceImpl<InformMapper, Inform>
     implements InformService{
+    @Autowired
+    private InformMapper informMapper;
 
+    
 }
 
 

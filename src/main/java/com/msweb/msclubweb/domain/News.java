@@ -43,20 +43,4 @@ public class News implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
-
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", introduction=").append(introduction);
-        sb.append(", title=").append(title);
-        sb.append(", time=").append(time);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
-    }
 }
