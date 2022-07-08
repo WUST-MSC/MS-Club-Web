@@ -56,6 +56,8 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
 
     @Override
     public int updateInfo(Department department) {
+        //预留做数据合理判断的
+        //更新
         int i = departmentMapper.updateById(department);
         if(i==1) return 200;
         else return 500;

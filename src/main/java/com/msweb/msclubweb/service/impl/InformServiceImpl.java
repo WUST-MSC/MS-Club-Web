@@ -42,6 +42,39 @@ public class InformServiceImpl extends ServiceImpl<InformMapper, Inform>
         else return 500;
     }
 
+    @Override
+    public Map<String, Object> selectByTitle(Inform inform) {
+        HashMap<String, Object> map = new HashMap<>();
+
+        LambdaQueryWrapper<Inform> one = new LambdaQueryWrapper<>();
+        one.eq(inform.getTitle()!=null&&inform.getTitle().length()!=0,
+                Inform::getTitle,
+                inform.getTitle());
+
+        Inform inform1 = informMapper.selectOne(one);
+        if(inform1!=null){
+            map.put("data",inform1);
+            map.put("code",200);
+        }else{
+            map.put("code",500);
+        }
+        return map;
+    }
+
+    @Override
+    public int deleteByTitle(Inform inform) {
+        LambdaQueryWrapper<Inform> one = new LambdaQueryWrapper<>();
+        one.eq(inform.getTitle()!=null&&inform.getTitle().length()!=0,
+                Inform::getTitle,
+                inform.getTitle());
+        int delete = informMapper.delete(one);
+        if(delete==1){
+            return 200;
+        }else{
+            return 500;
+        }
+    }
+
     //分页模糊查询
     @Override
     public Map<String,Object> selectPage(long currentPage, long pageSize,Inform inform) {
