@@ -1,0 +1,20 @@
+    <div class="jumbotron text-center" style="margin-bottom:0;background-color: rgba(51, 51, 51, 0.93);">
+        <div class="row">
+            <div class="col-md-5 col-md-offset-5 text-left">
+                <p style="color: white;">武汉科技大学微软俱乐部</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class=" col-md-5 col-md-offset-5 text-left">
+                <!-- 链接是空的 -->
+                <p style="color: white;">网址：&nbsp;<a href="#" style="color:white">httjsfkah</a></p>
+            </div>
+        </div>
+        <div class="row">
+            <!-- 加入我们id是join us -->
+            <div class=" col-md-5 col-md-offset-5 text-left" style="color:rgba(189, 185, 51, 0.662) " id="join us">
+                <font size="4">加入我们</font>
+            </div>
+        </div>
+    </div>
