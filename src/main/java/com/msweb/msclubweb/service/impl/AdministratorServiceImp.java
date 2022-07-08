@@ -1,10 +1,7 @@
 package com.msweb.msclubweb.service.impl;
 
-import com.baomidou.mybatisplus.core.injector.methods.Insert;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.msweb.msclubweb.domain.Administrator;
-import com.msweb.msclubweb.domain.Result;
 import com.msweb.msclubweb.mapper.AdministratorMapper;
 import com.msweb.msclubweb.service.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;

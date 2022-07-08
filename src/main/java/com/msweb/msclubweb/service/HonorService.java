@@ -20,4 +20,11 @@ public interface HonorService extends IService<Honor> {
 
     //查询数据
     public List<Honor> selectAll();
+
+    //按照id查询
+    public Honor selectById(Integer id);
+
+    //通过flag查询个人或团体荣誉
+    public List<Honor> selectByFlag (Integer flag);
+
 }

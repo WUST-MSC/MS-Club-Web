@@ -1,5 +1,7 @@
 package com.msweb.msclubweb.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -58,5 +60,21 @@ public class HonorServiceImpl extends ServiceImpl<HonorMapper, Honor> implements
     public List<Honor> selectAll(){
         List<Honor> message=honorMapper.selectList(null);
         return message;
+    }
+
+    //按照flag查询
+    @Override
+    public List<Honor> selectByFlag (Integer flag) {
+        QueryWrapper<Honor> one = new QueryWrapper<>();
+        one.ge("flag",flag);
+        List<Honor> message=honorMapper.selectList(one);
+        return message;
+    }
+
+    //按照id查询
+    @Override
+    public Honor selectById(Integer id){
+        Honor honor=honorMapper.selectById(id);
+        return honor;
     }
 }

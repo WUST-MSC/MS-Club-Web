@@ -1,6 +1,9 @@
 package com.msweb.msclubweb.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.msweb.msclubweb.domain.Honor;
+import com.msweb.msclubweb.domain.Recruitment;
 import com.msweb.msclubweb.domain.Works;
 import com.msweb.msclubweb.mapper.WorksMapper;
 import com.msweb.msclubweb.service.WorksService;
@@ -40,5 +43,23 @@ public class WorksServiceImpl extends ServiceImpl<WorksMapper, Works> implements
         return message;
     }
 
+    //根据id查询
+    @Override
+    public Works selectById(Integer id)
+    {
+        QueryWrapper<Works> one = new QueryWrapper<>();
+        one.ge("id",id);
+        Works message=worksMapper.selectOne(one);
+        return message;
+    }
 
+    //按照flag查看项目或作品
+    @Override
+    public List<Works> selectByFlag (Integer flag)
+    {
+        QueryWrapper<Works> one = new QueryWrapper<>();
+        one.ge("flag",flag);
+        List<Works> message=worksMapper.selectList(one);
+        return message;
+    }
 }

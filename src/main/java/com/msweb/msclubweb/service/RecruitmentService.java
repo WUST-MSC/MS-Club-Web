@@ -7,17 +7,18 @@ import com.msweb.msclubweb.domain.Recruitment;
 
 import javax.swing.*;
 import java.util.List;
+import java.util.Map;
 
 public interface RecruitmentService extends IService<Recruitment> {
     //添加
     public Integer AddRecruitment(Recruitment recruitment);
 
-    //删除
+    //通过id删除
     public Integer deleteBtId(Integer id);
 
     //查询全部
-    public List<Recruitment> message();
+    public List<Recruitment> selectAll();
 
-    //分页
-    public BackPage<Recruitment> selectPage (Integer pageNumber);
+    //按照学号查询信息
+    public Recruitment selectByStudent_id (Integer student_id);
 }
