@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.msweb.msclubweb.mapper.NewsImagsMapper">
+
+    <resultMap id="BaseResultMap" type="com.msweb.msclubweb.domain.NewsImags">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="newsId" column="news_id" jdbcType="INTEGER"/>
+            <result property="imagId" column="imag_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,news_id,imag_id
+    </sql>
+</mapper>
