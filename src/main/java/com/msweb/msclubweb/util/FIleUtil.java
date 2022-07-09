@@ -1,4 +1,4 @@
-package com.msweb.msclubweb.controller.util;
+package com.msweb.msclubweb.util;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,7 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FIleUtil {
-    public static boolean saveFile(MultipartFile file,String path){
+    public static Map<String,Object> saveFile(MultipartFile file,String path){
+        Map<String,Object> map = new HashMap<String,Object>();//定义结果
         //获取文件在服务器的储存位置
         File filePath = new File(path);
         System.out.println("文件的保存路径"+path);
@@ -40,14 +41,17 @@ public class FIleUtil {
         //在指定路径下创建文件
         File targetFile = new File(path,fileName);
 
-        Map<String,Object> result = new HashMap<String,Object>();//定义结果
+
         //将文件保存到服务器指定位置
         try{
             file.transferTo(targetFile);
         }catch (IOException e) {
             e.printStackTrace();
-            return false;
+            map.put("code","500");
+            return map;
         }
-        return true;
+        map.put("name",name);//name
+        map.put("fileName",fileName);//文件名
+        return map;
     }
 }

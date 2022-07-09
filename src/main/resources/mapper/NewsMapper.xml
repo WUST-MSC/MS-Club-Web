@@ -4,15 +4,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.msweb.msclubweb.mapper.NewsMapper">
 
-    <resultMap id="BaseResultMap" type="com.msweb.msclubweb.domain.News">
-            <id property="id" column="id" jdbcType="INTEGER"/>
+    <resultMap id="NewsResultMap" type="com.msweb.msclubweb.domain.News">
+            <id property="id" column="nid" jdbcType="INTEGER"/>
             <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
             <result property="title" column="title" jdbcType="VARCHAR"/>
             <result property="time" column="time" jdbcType="TIMESTAMP"/>
+            <collection property="authors" ofType="com.msweb.msclubweb.domain.Authors">
+                <id property="id" column="aid"/>
+                <result property="name" column="aname"/>
+            </collection>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,introduction,title,
         time
     </sql>
+    
+    <select id="selectBytime" resultMap="NewsResultMap">
+        select n.id nid,a.id aid,n.time,n.title,n.introduction,a.name aname
+        from news n,authors a,news_author na
+        where n.id = na.news_id and a.id = na.author_id and unix_timestamp(n.time)  = unix_timestamp(#{time})
+    </select>
 </mapper>
