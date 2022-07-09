@@ -31,7 +31,7 @@ public class NewsImagsServiceImpl extends ServiceImpl<NewsImagsMapper, NewsImags
             newsImags.setImagId(imgIds.get(i));
             //————————————可能要添加事务回滚——————————————————
             int insert = newsImagsMapper.insert(newsImags);
-            if(insert!=1) return 500;
+            if(insert==0) return 500;
         }
         return 200;
     }

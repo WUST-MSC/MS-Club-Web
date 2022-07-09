@@ -2,16 +2,20 @@ package com.msweb.msclubweb.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.msweb.msclubweb.common.Result;
 import com.msweb.msclubweb.domain.Imags;
+import com.msweb.msclubweb.domain.Inform;
 import com.msweb.msclubweb.service.ImagsService;
 import com.msweb.msclubweb.mapper.ImagsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
 * @author 86189
@@ -23,13 +27,37 @@ public class ImagsServiceImpl extends ServiceImpl<ImagsMapper, Imags>
     implements ImagsService{
     @Autowired
     private ImagsMapper imagsMapper;
+    @Value("${file.upload.path}")
+    private String path;
 
     //添加img
     @Override
-    public int addImg(Imags imags) {
+    public Result<Imags> addImg(MultipartFile file) {
+        //保存图片
+        File filePath = new File(path);
+        if(!filePath.exists() && !filePath.isDirectory()){
+            filePath.mkdir();
+        }
+        String originalFileName = file.getOriginalFilename();
+        String type = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String date = sdf.format(d);
+        String fileName = date  + "." +type;
+        File targetFile = new File(path,fileName);
+        //将文件保存到服务器指定位置
+        try{
+            file.transferTo(targetFile);
+        }catch (IOException e) {
+            e.printStackTrace();
+            return Result.sqlError();
+        }
+        //存入数据库
+        Imags imags = new Imags();
+        imags.setSrc(path+"/"+fileName);
+        imags.setName(date);//以时间戳为名字
         int insert = imagsMapper.insert(imags);
-        if(insert == 1) return 200;
-        else return 500;
+        return insert==0?Result.sqlError():Result.success(null);
     }
 
     @Override

@@ -1,7 +1,10 @@
 package com.msweb.msclubweb.service;
 
+import com.msweb.msclubweb.common.Result;
 import com.msweb.msclubweb.domain.Imags;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.msweb.msclubweb.domain.Inform;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +16,7 @@ import java.util.Map;
 */
 public interface ImagsService extends IService<Imags> {
     //添加图片
-    int addImg(Imags imags);
+    Result<Imags> addImg(MultipartFile file);
     //通过name找id
     Imags selectByName(String imgName);
     //通过names找id

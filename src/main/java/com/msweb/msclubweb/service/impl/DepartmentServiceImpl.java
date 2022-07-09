@@ -3,6 +3,7 @@ package com.msweb.msclubweb.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.msweb.msclubweb.common.Result;
 import com.msweb.msclubweb.domain.Department;
 import com.msweb.msclubweb.service.DepartmentService;
 import com.msweb.msclubweb.mapper.DepartmentMapper;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,58 +26,49 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     private DepartmentMapper departmentMapper;
 
     @Override
-    public int addDepartment(Department department) {
-       /* //判断不为空
-        if(department.getQq()==null || department.getQq().length()==0 ||
-                department.getEmail()==null || department.getEmail().length()==0 ||
-                department.getName()==null || department.getName().length()==0 )
-            return 400;
-        //检验数据是否合法   ---听说前端做格式判断更加方便
-        //1.qq不能包含非数字
-        String qq = department.getQq();
-        char[] chars = qq.toCharArray();
-        for(int i =0;i<chars.length;i++){
-            if (chars[i]>'9'&&chars[i]<'0') return 400;
-        }*/
-        //添加
+    public Result<Department> addDepartment(Department department) {
+        //1.name不能重(应该不会有两届部长同名吧)
+        LambdaQueryWrapper<Department> one = new LambdaQueryWrapper<>();
+        one.eq(Department::getName,department.getName());
+
+        List<Department> list = departmentMapper.selectList(one);
+        if(list.size()>0) return Result.dataError();
+        //2.添加本地
         int insert = departmentMapper.insert(department);
-        if(insert==1) return 200;
-        else return 500;
+        return insert==0?Result.sqlError():Result.success(null);
     }
 
+    //或者通过名字（qq，email可能会更改，没办法）
     @Override
-    public int deleteByName(Department department) {
+    public Result<Department> deleteByName(Department department) {
         LambdaQueryWrapper<Department> one = new LambdaQueryWrapper<>();
         one.eq(department.getName()!=null&&department.getName().length()!=0,
                 Department::getName,
                 department.getName());
         int delete = departmentMapper.delete(one);
-        if(delete == 1)return 200;
-        else return 500;
+        return delete==0?Result.sqlError():Result.success(null);
     }
 
+    //修改部门管理信息,
     @Override
-    public int updateInfo(Department department) {
-        //预留做数据合理判断的
-        //更新
-        int i = departmentMapper.updateById(department);
-        if(i==1) return 200;
-        else return 500;
+    public Result<Department> updateInfo(Department department) {
+        //修改
+        LambdaQueryWrapper<Department> one = new LambdaQueryWrapper<>();
+        one.eq(Department::getName,department.getName());
+
+        int update = departmentMapper.update(department,one);
+        return update==0?Result.sqlError():Result.success(null);
     }
 
+    //通过flag找到对应部门的管理
     @Override
-    public Map<String,Object> selectByFlag(Department department) {
-        HashMap<String, Object> map = new HashMap<>();
+    public Result<Department> findByFlag(Department department) {
         //查找
         LambdaQueryWrapper<Department> one = new LambdaQueryWrapper<>();
         one.eq(Department::getFlag,department.getFlag());
         Department result = departmentMapper.selectOne(one);
         //判断
-        if(result != null){
-            map.put("flag",200);
-            map.put("data",result);
-        }else map.put("flag",500);
-        return map;
+        return result==null?Result.notFound():Result.success(result);
     }
 }
 

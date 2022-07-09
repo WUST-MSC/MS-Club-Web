@@ -1,14 +1,20 @@
 package com.msweb.msclubweb;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.msweb.msclubweb.common.PageParam;
 import com.msweb.msclubweb.domain.Authors;
 import com.msweb.msclubweb.domain.Imags;
+import com.msweb.msclubweb.domain.News;
 import com.msweb.msclubweb.mapper.AuthorsMapper;
+import com.msweb.msclubweb.mapper.NewsMapper;
+import com.msweb.msclubweb.util.PatternHelper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -17,6 +23,9 @@ class MsClubWebApplicationTests {
 
     @Autowired
     private AuthorsMapper authorsMapper;
+
+    @Autowired
+    private NewsMapper newsMapper;
 
     @Test
     void contextLoads() throws InterruptedException {
@@ -45,7 +54,9 @@ class MsClubWebApplicationTests {
     }
 
     @Test
-    public void test1(){
-        System.out.println();
+    public void test1() throws ParseException {
+        Date parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2022-07-09 21:04:25.262");
+        News news = newsMapper.selectBytime(parse);
+        System.out.println(news);
     }
 }

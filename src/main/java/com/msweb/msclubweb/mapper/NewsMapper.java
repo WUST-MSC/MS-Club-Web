@@ -3,7 +3,10 @@ package com.msweb.msclubweb.mapper;
 import com.msweb.msclubweb.domain.News;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.Date;
 
 /**
 * @author 86189
@@ -14,7 +17,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface NewsMapper extends BaseMapper<News> {
-
+    News selectBytime(@Param("time") Date time);
 }
 
 

@@ -1,4 +1,4 @@
-package com.msweb.msclubweb.vo;
+package com.msweb.msclubweb.common;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

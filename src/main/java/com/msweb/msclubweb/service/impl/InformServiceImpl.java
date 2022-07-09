@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.msweb.msclubweb.common.PageParam;
+import com.msweb.msclubweb.common.Result;
 import com.msweb.msclubweb.domain.Inform;
 import com.msweb.msclubweb.service.InformService;
 import com.msweb.msclubweb.mapper.InformMapper;
@@ -27,73 +29,58 @@ public class InformServiceImpl extends ServiceImpl<InformMapper, Inform>
     private InformMapper informMapper;
     //写通知
     @Override
-    public int addInform(Inform inform) {
-        //校验信息不为空
-        /*String title = inform.getTitle();
-        if (title == null || title.length() == 0) return 400;
-        String introduction = inform.getIntroduction();
-        if (introduction == null || introduction.length() == 0) return 400;*/
+    public Result<Inform> addInform(Inform inform) {
+        //逻辑合理性判断
+        //1.封装时间数据
         Date date = new Date();
-        //封装时间数据
         inform.setTime(date);
-        //写入数据库
+        //2.写入数据库
         int insert = informMapper.insert(inform);
-        if(insert == 1) return 200;
-        else return 500;
+        return insert == 0?Result.sqlError():Result.success(null);
     }
 
     @Override
-    public Map<String, Object> selectByTitle(Inform inform) {
-        HashMap<String, Object> map = new HashMap<>();
-
+    public Result<Inform> selectByTime(Inform inform) {
         LambdaQueryWrapper<Inform> one = new LambdaQueryWrapper<>();
-        one.eq(inform.getTitle()!=null&&inform.getTitle().length()!=0,
+        one.eq(inform.getTime()!=null,
                 Inform::getTitle,
                 inform.getTitle());
 
         Inform inform1 = informMapper.selectOne(one);
-        if(inform1!=null){
-            map.put("data",inform1);
-            map.put("code",200);
-        }else{
-            map.put("code",500);
-        }
-        return map;
+        return inform1==null?Result.notFound():Result.success(inform1);
     }
 
     @Override
-    public int deleteByTitle(Inform inform) {
+    public Result<Inform> deleteByTime(Inform inform) {
+        //1.删除
         LambdaQueryWrapper<Inform> one = new LambdaQueryWrapper<>();
-        one.eq(inform.getTitle()!=null&&inform.getTitle().length()!=0,
+        one.eq(inform.getTime()!=null,
                 Inform::getTitle,
                 inform.getTitle());
         int delete = informMapper.delete(one);
-        if(delete==1){
-            return 200;
-        }else{
-            return 500;
-        }
+        return delete==0?Result.sqlError():Result.success(null);
     }
 
     //分页模糊查询
     @Override
-    public Map<String,Object> selectPage(long currentPage, long pageSize,Inform inform) {
+    public
+    Page<Inform> selectPage(PageParam pageParam, Inform inform) {
         HashMap<String, Object> map = new HashMap<>();
         LambdaQueryWrapper<Inform> one = new LambdaQueryWrapper<>();
         one.like(inform.getTitle()!=null&&inform.getTitle().length()!=0,
                 Inform::getTitle,
                 inform.getTitle());
-        Page<Inform> page = new Page<>(currentPage, pageSize);
+        Page<Inform> page = new Page<>(pageParam.getPage(), pageParam.getSize());
         informMapper.selectPage(page, one);
 
-        long totalInfoNum = page.getTotal();
+        /*long totalInfoNum = page.getTotal();
         long totalPageNum = page.getPages();
         List<Inform> records = page.getRecords();
 
         map.put("totalInfoNum",totalInfoNum);
         map.put("totalPageNum",totalPageNum);
-        map.put("records",records);
-        return map;
+        map.put("records",records);*/
+        return page;
     }
 
 }
