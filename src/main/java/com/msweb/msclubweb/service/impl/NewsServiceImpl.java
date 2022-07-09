@@ -1,8 +1,10 @@
 package com.msweb.msclubweb.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.msweb.msclubweb.domain.Imags;
+import com.msweb.msclubweb.domain.Inform;
 import com.msweb.msclubweb.domain.News;
 import com.msweb.msclubweb.mapper.ImagsMapper;
 import com.msweb.msclubweb.service.ImagsService;
@@ -26,7 +28,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News>
     @Autowired
     private NewsMapper newsMapper;
     @Autowired
-    private ImagsMapper imagsMapper;
+    private ImagsService imagsService;
     @Autowired
     private NewsAuthorService newsAuthorService;
     //定义标识符
@@ -65,9 +67,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News>
             String name = text.substring(first+1,last);
             imgName.add(name);
             //开始替换
-            LambdaQueryWrapper<Imags> mid = new LambdaQueryWrapper<>();
-            mid.eq(Imags::getName,name);
-            Imags imags = imagsMapper.selectOne(mid);
+            Imags imags = imagsService.selectByName(name);
             if(imags!=null){//图片存在
                 text.replace(first+1,last,imags.getSrc());
                 first = first + imags.getSrc().length();
@@ -115,7 +115,22 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News>
 
     @Override
     public Map<String, Object> selectPage(long currentPage, long pageSize, News news) {
-        return null;
+        HashMap<String, Object> map = new HashMap<>();
+        LambdaQueryWrapper<News> one = new LambdaQueryWrapper<>();
+        one.like(news.getTitle()!=null&&news.getTitle().length()!=0,
+                News::getTitle,
+                news.getTitle());
+        Page<News> page = new Page<>(currentPage, pageSize);
+        newsMapper.selectPage(page,one);
+
+        long totalInfoNum = page.getTotal();
+        long totalPageNum = page.getPages();
+        List<News> records = page.getRecords();
+
+        map.put("totalInfoNum",totalInfoNum);
+        map.put("totalPageNum",totalPageNum);
+        map.put("records",records);
+        return map;
     }
 }
 

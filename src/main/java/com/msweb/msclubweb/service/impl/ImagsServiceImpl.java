@@ -33,6 +33,15 @@ public class ImagsServiceImpl extends ServiceImpl<ImagsMapper, Imags>
     }
 
     @Override
+    public Imags selectByName(String imgName) {
+        LambdaQueryWrapper<Imags> one = new LambdaQueryWrapper<>();
+        one.eq(Imags::getName,imgName);
+
+        Imags imags = imagsMapper.selectOne(one);
+        return imags;
+    }
+
+    @Override
     public Map<String, Object> selectByNames(List<String> imgNames) {
         HashMap<String, Object> map = new HashMap<>();
         ArrayList<Integer> imgIds = new ArrayList<>();

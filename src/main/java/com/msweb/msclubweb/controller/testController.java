@@ -1,8 +1,7 @@
 package com.msweb.msclubweb.controller;
 
-import com.msweb.msclubweb.controller.util.R;
+import com.msweb.msclubweb.vo.R;
 import com.msweb.msclubweb.domain.*;
-import com.msweb.msclubweb.mapper.NewsImagsMapper;
 import com.msweb.msclubweb.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -267,6 +266,29 @@ public class testController {
         }
         return r;//当全部正常执行时会从这返回
     }
+    //4.新闻模糊查询
+    @PostMapping("/news/find")
+    public R findNews(@RequestBody Map<String,Object> map){
+        R r = new R();
+        //获取数据
+        long currentPage = Long.valueOf(map.get("currentPage").toString());
+        long pageSize = Long.valueOf(map.get("pageSize").toString());
+        String title = (String) map.get("title");
+        News news = new News();
+        news.setTitle(title);
+        //模糊查询
+        Map<String, Object> one = newsService.selectPage(currentPage, pageSize, news);
+        //
+        if(one.get("records")==null){
+            r.setCode(404);
+            r.setMsg("Content does not exist");
+        }else{
+            r.setCode(200);
+            r.setMsg("success");
+            r.setDate(one);
+        }
+        return r;
+    }
 
     //公告操作
     //1.写公告
@@ -339,5 +361,72 @@ public class testController {
         map.put("totalInfoNum",totalInfoNum);
         map.put("totalPageNum",totalPageNum);
         map.put("records",records);*/
+    }
+    //department
+    //1.查看view
+    @PostMapping("/department/view")
+    public R viewDepartment(@RequestBody Department department){
+        R r = new R();
+        //1.通过flag查看
+        Map<String, Object> map = departmentService.selectByFlag(department);
+        int code = (int) map.get("code");
+        r.setCode(code);
+        if(code==200){
+            r.setDate(map.get("data"));
+            r.setMsg("success");
+        }else{
+            if(code==500){
+                r.setMsg("Not found");
+            }
+        }
+        return r;
+    }
+    //修改
+    @PostMapping("/department/update")
+    public R updateDepartment(@RequestBody Department department){
+        R r = new R();
+        //1.通过flag查看
+        int code = departmentService.updateInfo(department);
+        r.setCode(code);
+        if(code==200){
+            r.setMsg("success");
+        }else{
+            if(code==500){
+                r.setMsg("Not found");
+            }
+        }
+        return r;
+    }
+    //删除
+    @PostMapping("/department/del")
+    public R delDepartment(@RequestBody Department department){
+        R r = new R();
+        //1.通过flag查看
+        int code = departmentService.deleteByName(department);
+        r.setCode(code);
+        if(code==200){
+            r.setMsg("success");
+        }else{
+            if(code==500){
+                r.setMsg("The server is busy. Try again later");
+            }
+        }
+        return r;
+    }
+    //添加
+    @PostMapping("/department/add")
+    public R addDepartment(@RequestBody Department department){
+        R r = new R();
+        //1.通过flag查看
+        int code = departmentService.addDepartment(department);
+        r.setCode(code);
+        if(code==200){
+            r.setMsg("success");
+        }else{
+            if(code==500){
+                r.setMsg("The server is busy. Try again later");
+            }
+        }
+        return r;
     }
 }

@@ -44,11 +44,11 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     }
 
     @Override
-    public int deleteByName(String name) {
+    public int deleteByName(Department department) {
         LambdaQueryWrapper<Department> one = new LambdaQueryWrapper<>();
-        one.eq(name!=null&&name.length()!=0,
+        one.eq(department.getName()!=null&&department.getName().length()!=0,
                 Department::getName,
-                name);
+                department.getName());
         int delete = departmentMapper.delete(one);
         if(delete == 1)return 200;
         else return 500;
@@ -64,11 +64,11 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     }
 
     @Override
-    public Map<String,Object> selectByFlag(int flag) {
+    public Map<String,Object> selectByFlag(Department department) {
         HashMap<String, Object> map = new HashMap<>();
         //查找
         LambdaQueryWrapper<Department> one = new LambdaQueryWrapper<>();
-        one.eq(Department::getFlag,flag);
+        one.eq(Department::getFlag,department.getFlag());
         Department result = departmentMapper.selectOne(one);
         //判断
         if(result != null){
