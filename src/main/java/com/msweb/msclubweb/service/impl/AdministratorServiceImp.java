@@ -1,5 +1,6 @@
 package com.msweb.msclubweb.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.msweb.msclubweb.domain.Administrator;
 import com.msweb.msclubweb.mapper.AdministratorMapper;
@@ -25,9 +26,11 @@ public class AdministratorServiceImp extends ServiceImpl<AdministratorMapper, Ad
 
     //删除社团高层人员
     @Override
-    public Integer deleteById( Administrator administrator){
-        int flag=administratorMapper.deleteById(administrator.getId());
-        if (flag > 0) return 1;
+    public Integer deleteByName( Administrator administrator){
+        LambdaQueryWrapper<Administrator> one = new LambdaQueryWrapper<>();
+        one.eq(administrator.getName()!=null, Administrator::getName, administrator.getName());
+        int flag = administratorMapper.delete(one);
+        if(flag>0) return 1;
         else return 0;
     }
 

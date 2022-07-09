@@ -1,7 +1,6 @@
 package com.msweb.msclubweb.controller;
 
 
-import com.baomidou.mybatisplus.extension.api.R;
 import com.msweb.msclubweb.domain.*;
 import com.msweb.msclubweb.service.AdministratorService;
 import com.msweb.msclubweb.service.HonorService;
@@ -10,12 +9,9 @@ import com.msweb.msclubweb.service.WorksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -41,10 +37,10 @@ public class TestController {
         return new Result(500,"添加失败!");
     }
 
-    //按id删除高层信息
-    @PostMapping("/Administrator/deleteById")
+    //按Name删除高层信息
+    @PostMapping("/Administrator/deleteByName")
     public Result deleteAdministratorById(@RequestBody Administrator administrator){
-        int flag=administratorService.deleteById(administrator);
+        int flag=administratorService.deleteByName(administrator);
         if(flag==1) return new Result(200,"删除成功!");
         return new Result(500,"删除失败！");
     }
@@ -68,10 +64,10 @@ public class TestController {
     }
 
     //荣誉部分
-    //分页查看荣誉
+    //分页分类查看荣誉
     @PostMapping("/honor/searchByPage")
-    public Result getPageHonor(@RequestBody Integer HonorPage) {
-        BackPage<Honor> PageMessage=honorService.selectPage(HonorPage);
+    public Result getPageHonor(@RequestBody PageSelect pageSelect) {
+        BackPage<Honor> PageMessage=honorService.selectPage(pageSelect);
         if (PageMessage.getContentList().size()==0) return new Result(500,"查看失败！");
         else return new Result(200,"查询成功",PageMessage);
     }
@@ -85,10 +81,10 @@ public class TestController {
         else return new Result(500,"添加失败");
     }
 
-    //按照id删除荣誉
-    @PostMapping("/honor/deleteById")
+    //按照Title删除荣誉
+    @PostMapping("/honor/deleteByTitle")
     public Result deleteHonorById(@RequestBody Honor honor){
-        int flag=honorService.deleteById(honor);
+        int flag=honorService.deleteByTitle(honor);
         if (flag==1) return new Result(200,"删除成功");
         else return new Result(500,"删除失败");
     }
@@ -98,26 +94,17 @@ public class TestController {
     public Result getAllHonor()
     {
         List<Honor> message=honorService.selectAll();
-        int flag;
         if(message.size()==0) return new Result(500,"查询失败");
         else return new Result(200," 查询成功",message);
     }
 
-    //按照flag查询团体/个人荣誉
-    @PostMapping("/honor/flag")
-    public Result selectHonorByFlag(@RequestBody Integer flag)
-    {
-        List<Honor> message=honorService.selectByFlag(flag);
-        if(message.isEmpty()) return new Result(500,"查询失败");
-        else return new Result(200,"查询成功",message);
-    }
 
-    //按照id查询荣誉
-    @PostMapping("/honor/selectById")
-    public Result honorSelectById(Integer id)
+    //按照Title查询荣誉
+    @PostMapping("/honor/selectByTitle")
+    public Result honorSelectById(Honor honor)
     {
-        Honor honor=honorService.selectById(id);
-        if(honor.getId()==null) return new Result(500,"获取失败！");
+        Honor honorMessage=honorService.selectByTitle(honor);
+        if(honorMessage.getId()==null) return new Result(500,"获取失败！");
         else return new Result(200,"获取成功",honor);
     }
 
@@ -141,11 +128,11 @@ public class TestController {
         return new Result(500,"添加失败!");
     }
 
-    //按id删除报名信息
-    @PostMapping("/Recruitment/deleteById")
+    //按email删除报名信息
+    @PostMapping("/Recruitment/deleteByEmail")
     public  Result deleteRecruitmentById(@RequestBody Recruitment recruitment)
     {
-        int flag=recruitmentService.deleteBtId(recruitment);
+        int flag=recruitmentService.deleteByEmail(recruitment);
         if (flag==1) return new Result(200,"删除成功");
         else return new Result(500,"删除失败");
     }
@@ -155,17 +142,16 @@ public class TestController {
     public  Result getAllRecruitment()
     {
         List<Recruitment> message=recruitmentService.selectAll();
-        int flag;
         if(message.size()==0) return new Result(500,"查询失败");
         else return new Result(200," 查询成功",message);
     }
 
-    //按照学号查询报名信息
-    @PostMapping("/Recruitment/selectByS_id")
-    public  Result recruitmentSelectByStudent_id(@RequestBody Integer student_id)
+    //按照email查询报名信息
+    @PostMapping("/Recruitment/selectByEmail")
+    public  Result recruitmentSelectByStudent_id(@RequestBody Recruitment recruitment)
     {
-        Recruitment recruitment=recruitmentService.selectByStudent_id(student_id);
-        if(recruitment.getId()==0) return new Result(500,"查询失败!");
+        Recruitment recruitmentMessage=recruitmentService.selectByEmail(recruitment);
+        if(recruitmentMessage.getId()==0) return new Result(500,"查询失败!");
         else return new Result(200,"查询成功",recruitment);
 
     }
@@ -183,21 +169,21 @@ public class TestController {
         else return new Result(500,"添加失败");
     }
 
-    //删除项目作品
-    @PostMapping("/Works/deleteById")
+    //根据Title删除项目作品
+    @PostMapping("/Works/deleteByTitle")
     public  Result deleteWorksById(@RequestBody Works works)
     {
-        int flag=worksService.deleteById(works);
+        int flag=worksService.deleteByTitle(works);
         if (flag==200) return new Result(200,"删除成功");
         else return new Result(500,"删除失败");
     }
 
-    //按id查看项目作品
-    @PostMapping("/Works/selectById")
-    public  Result selectWorksById(@RequestBody Integer id)
+    //按Title查看项目作品
+    @PostMapping("/Works/selectByTitle")
+    public  Result selectWorksById(@RequestBody Works works)
     {
-        Works works=worksService.selectById(id);
-        if(works.getId()==0) return new Result(500,"查询失败!");
+        Works worksMessage=worksService.selectByTitle(works);
+        if(worksMessage.getId()==0) return new Result(500,"查询失败!");
         else return new Result(200,"查询成功",works);
     }
 

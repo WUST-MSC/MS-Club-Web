@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.msweb.msclubweb.domain.Administrator;
 import com.msweb.msclubweb.domain.BackPage;
 import com.msweb.msclubweb.domain.Honor;
+import com.msweb.msclubweb.domain.PageSelect;
 
 import java.util.List;
 import java.util.Map;
@@ -14,22 +15,19 @@ public interface HonorService extends IService<Honor> {
     public Integer AddHonor(Honor honor);
 
     //删除荣誉
-    public Integer deleteById(Honor honor);
+    public Integer deleteByTitle(Honor honor);
 
     //更改
     public Integer Update (Honor honor);
 
-    //分页功能
-    public BackPage<Honor> selectPage (Integer page);
+    //分页分类别查询
+    public BackPage<Honor> selectPage (PageSelect pageSelect);
 
     //查询数据
     public List<Honor> selectAll();
 
-    //按照id查询
-    public Honor selectById(Integer id);
-
-    //通过flag查询个人或团体荣誉
-    public List<Honor> selectByFlag (Integer flag);
+    //按照Title查询
+    public Honor selectByTitle(Honor honor);
 
 
 

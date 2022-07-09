@@ -26,6 +26,7 @@ public class Works {
 
     private String img;
 
+    //flag=1代表作品 flag=2代表项目
     private Integer flag;
 
     @TableField(exist = false)

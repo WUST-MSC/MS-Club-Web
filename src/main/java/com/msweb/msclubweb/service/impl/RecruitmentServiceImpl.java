@@ -1,7 +1,9 @@
 package com.msweb.msclubweb.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.msweb.msclubweb.domain.Honor;
 import com.msweb.msclubweb.domain.Recruitment;
 import com.msweb.msclubweb.mapper.RecruitmentMapper;
 import com.msweb.msclubweb.service.RecruitmentService;
@@ -27,10 +29,12 @@ public class RecruitmentServiceImpl extends ServiceImpl<RecruitmentMapper, Recru
 
     //删除信息
     @Override
-    public Integer deleteBtId(Recruitment recruitment){
-        int flag=recruitmentMapper.deleteById(recruitment.getId());
-        if (flag > 0) return 200;
-        else return 500;
+    public Integer deleteByEmail(Recruitment recruitment){
+        LambdaQueryWrapper<Recruitment> one = new LambdaQueryWrapper<>();
+        one.eq(recruitment.getEmail()!=null, Recruitment::getEmail, recruitment.getEmail());
+        int flag = recruitmentMapper.delete(one);
+        if(flag>0) return 1;
+        else return 0;
     }
 
     //查询所有信息
@@ -41,9 +45,9 @@ public class RecruitmentServiceImpl extends ServiceImpl<RecruitmentMapper, Recru
 
     //按照学号查询信息
     @Override
-    public Recruitment selectByStudent_id (Integer student_id) {
-        QueryWrapper<Recruitment> one = new QueryWrapper<>();
-        one.ge("student_id",student_id);
+    public Recruitment selectByEmail (Recruitment recruitment) {
+        LambdaQueryWrapper<Recruitment> one = new LambdaQueryWrapper<>();
+        one.eq(recruitment.getEmail()!=null, Recruitment::getEmail, recruitment.getEmail());
         return recruitmentMapper.selectOne(one);
     }
 

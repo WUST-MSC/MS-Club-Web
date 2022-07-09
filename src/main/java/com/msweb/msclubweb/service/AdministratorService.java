@@ -10,7 +10,7 @@ public interface AdministratorService extends IService<Administrator> {
     public Integer AddAdministrator(Administrator administrator);
 
     //删除
-    public Integer deleteById( Administrator administrator);
+    public Integer deleteByName( Administrator administrator);
 
     //更改
     public Integer Update (Administrator administrator);

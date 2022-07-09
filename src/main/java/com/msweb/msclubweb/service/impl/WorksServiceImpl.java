@@ -1,5 +1,6 @@
 package com.msweb.msclubweb.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.msweb.msclubweb.domain.Honor;
@@ -30,9 +31,11 @@ public class WorksServiceImpl extends ServiceImpl<WorksMapper, Works> implements
 
     //删除项目或作品
     @Override
-    public Integer deleteById(Works works){
-        int flag=worksMapper.deleteById(works.getId());
-        if (flag > 0) return 1;
+    public Integer deleteByTitle(Works works){
+        LambdaQueryWrapper<Works> one = new LambdaQueryWrapper<>();
+        one.eq(works.getTitle()!=null, Works::getTitle, works.getTitle());
+        int flag = worksMapper.delete(one);
+        if(flag>0) return 1;
         else return 0;
     }
 
@@ -43,14 +46,13 @@ public class WorksServiceImpl extends ServiceImpl<WorksMapper, Works> implements
         return message;
     }
 
-    //根据id查询
+    //根据Title查询
     @Override
-    public Works selectById(Integer id)
+    public Works selectByTitle(Works works)
     {
-        QueryWrapper<Works> one = new QueryWrapper<>();
-        one.ge("id",id);
-        Works message=worksMapper.selectOne(one);
-        return message;
+        LambdaQueryWrapper<Works> one = new LambdaQueryWrapper<>();
+        one.eq(works.getTitle()!=null, Works::getTitle, works.getTitle());
+        return worksMapper.selectOne(one);
     }
 
     //按照flag查看项目或作品
