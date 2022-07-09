@@ -1,14 +1,11 @@
 package com.msweb.msclubweb.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.msweb.msclubweb.domain.Administrator;
 import com.msweb.msclubweb.domain.BackPage;
 import com.msweb.msclubweb.domain.Honor;
 import com.msweb.msclubweb.domain.PageSelect;
 
 import java.util.List;
-import java.util.Map;
 
 public interface HonorService extends IService<Honor> {
     //添加荣誉
