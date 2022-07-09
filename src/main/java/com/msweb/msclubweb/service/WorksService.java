@@ -1,6 +1,7 @@
 package com.msweb.msclubweb.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.msweb.msclubweb.domain.Administrator;
 import com.msweb.msclubweb.domain.Honor;
 import com.msweb.msclubweb.domain.Works;
 
@@ -12,7 +13,10 @@ public interface WorksService extends IService<Works> {
     public Integer addWorks(Works works);
 
     //删除项目或作品
-    public Integer deleteById(Integer id);
+    public Integer deleteById(Works works);
+
+    //更改
+    public Integer Update (Works works);
 
     //查询全部
     public List<Works> selectAll();
@@ -22,4 +26,6 @@ public interface WorksService extends IService<Works> {
 
     //按照flag查看项目或作品
     public List<Works> selectByFlag (Integer flag);
+
+
 }

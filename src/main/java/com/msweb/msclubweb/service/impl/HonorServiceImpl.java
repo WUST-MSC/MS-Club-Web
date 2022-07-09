@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.msweb.msclubweb.domain.BackPage;
 import com.msweb.msclubweb.domain.Honor;
+import com.msweb.msclubweb.domain.Works;
 import com.msweb.msclubweb.mapper.HonorMapper;
 import com.msweb.msclubweb.service.HonorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +28,16 @@ public class HonorServiceImpl extends ServiceImpl<HonorMapper, Honor> implements
     public Integer AddHonor(Honor honor){
 
         int flag=honorMapper.insert(honor);
-        if (flag==1) return 200;
-        else return 500;
+        if (flag > 0) return 1;
+        else return 0;
     }
 
     //删除荣誉
     @Override
-    public Integer deleteById(Integer id){
-        int flag=honorMapper.deleteById(id);
-        if(flag==1) return 200;
-        else return 100;
+    public Integer deleteById(Honor honor){
+        int flag=honorMapper.deleteById(honor.getId());
+        if (flag > 0) return 1;
+        else return 0;
     }
 
     //分页查询
@@ -76,5 +77,12 @@ public class HonorServiceImpl extends ServiceImpl<HonorMapper, Honor> implements
     public Honor selectById(Integer id){
         Honor honor=honorMapper.selectById(id);
         return honor;
+    }
+
+    @Override
+    public Integer Update (Honor honor){
+        Integer flag=honorMapper.updateById(honor);
+        if (flag > 0) return 1;
+        else return 0;
     }
 }

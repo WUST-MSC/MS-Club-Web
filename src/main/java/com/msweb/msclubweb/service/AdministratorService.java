@@ -10,7 +10,10 @@ public interface AdministratorService extends IService<Administrator> {
     public Integer AddAdministrator(Administrator administrator);
 
     //删除
-    public Integer deleteById(Integer id);
+    public Integer deleteById( Administrator administrator);
+
+    //更改
+    public Integer Update (Administrator administrator);
 
     //查询数据
     public List<Administrator> selectAll();

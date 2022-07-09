@@ -23,17 +23,17 @@ public class WorksServiceImpl extends ServiceImpl<WorksMapper, Works> implements
     public Integer addWorks(Works works){
 
         int flag=worksMapper.insert(works);
-        if (flag == 1) return 200;
-        else return 500;
+        if (flag > 0) return 1;
+        else return 0;
 
     }
 
     //删除项目或作品
     @Override
-    public Integer deleteById(Integer id){
-        int flag=worksMapper.deleteById(id);
-        if(flag==1) return 200;
-        else return 500;
+    public Integer deleteById(Works works){
+        int flag=worksMapper.deleteById(works.getId());
+        if (flag > 0) return 1;
+        else return 0;
     }
 
     //查询所有
@@ -61,5 +61,13 @@ public class WorksServiceImpl extends ServiceImpl<WorksMapper, Works> implements
         one.ge("flag",flag);
         List<Works> message=worksMapper.selectList(one);
         return message;
+    }
+
+    @Override
+    public Integer Update (Works works)
+    {
+        Integer flag=worksMapper.updateById(works);
+        if (flag > 0) return 1;
+        else return 0;
     }
 }

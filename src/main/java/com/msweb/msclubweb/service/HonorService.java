@@ -2,6 +2,7 @@ package com.msweb.msclubweb.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.msweb.msclubweb.domain.Administrator;
 import com.msweb.msclubweb.domain.BackPage;
 import com.msweb.msclubweb.domain.Honor;
 
@@ -13,7 +14,10 @@ public interface HonorService extends IService<Honor> {
     public Integer AddHonor(Honor honor);
 
     //删除荣誉
-    public Integer deleteById(Integer id);
+    public Integer deleteById(Honor honor);
+
+    //更改
+    public Integer Update (Honor honor);
 
     //分页功能
     public BackPage<Honor> selectPage (Integer page);
@@ -26,5 +30,7 @@ public interface HonorService extends IService<Honor> {
 
     //通过flag查询个人或团体荣誉
     public List<Honor> selectByFlag (Integer flag);
+
+
 
 }

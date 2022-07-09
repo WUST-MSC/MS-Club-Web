@@ -1,6 +1,7 @@
 package com.msweb.msclubweb.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.msweb.msclubweb.domain.Administrator;
 import com.msweb.msclubweb.domain.BackPage;
 import com.msweb.msclubweb.domain.Honor;
 import com.msweb.msclubweb.domain.Recruitment;
@@ -14,7 +15,8 @@ public interface RecruitmentService extends IService<Recruitment> {
     public Integer AddRecruitment(Recruitment recruitment);
 
     //通过id删除
-    public Integer deleteBtId(Integer id);
+    public Integer deleteBtId(Recruitment recruitment);
+
 
     //查询全部
     public List<Recruitment> selectAll();

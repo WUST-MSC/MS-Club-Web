@@ -19,16 +19,16 @@ public class AdministratorServiceImp extends ServiceImpl<AdministratorMapper, Ad
     public Integer AddAdministrator(Administrator administrator){
 ;
         int flag=administratorMapper.insert(administrator);
-        if(flag==1) return 200;
-        else return 500;
+        if (flag > 0) return 1;
+        else return 0;
     }
 
     //删除社团高层人员
     @Override
-    public Integer deleteById( Integer id){
-        int flag=administratorMapper.deleteById(id);
-        if(flag ==1) return 200;
-        else return 500;
+    public Integer deleteById( Administrator administrator){
+        int flag=administratorMapper.deleteById(administrator.getId());
+        if (flag > 0) return 1;
+        else return 0;
     }
 
     //查询所有高层
@@ -36,5 +36,14 @@ public class AdministratorServiceImp extends ServiceImpl<AdministratorMapper, Ad
     public List<Administrator> selectAll(){
         List<Administrator> message= administratorMapper.selectList(null);
         return message;
+    }
+
+    //更改
+    @Override
+    public Integer Update (Administrator administrator)
+    {
+        int flag=administratorMapper.updateById(administrator);
+        if (flag > 0) return 1;
+        else return 0;
     }
 }
