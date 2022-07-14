@@ -25,5 +25,4 @@ public interface WorksService extends IService<Works> {
     //按照flag查看项目或作品
     public List<Works> selectByFlag (Integer flag);
 
-
 }

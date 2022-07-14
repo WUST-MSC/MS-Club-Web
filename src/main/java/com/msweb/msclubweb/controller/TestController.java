@@ -2,15 +2,15 @@ package com.msweb.msclubweb.controller;
 
 
 import com.msweb.msclubweb.domain.*;
-import com.msweb.msclubweb.service.AdministratorService;
-import com.msweb.msclubweb.service.HonorService;
-import com.msweb.msclubweb.service.RecruitmentService;
-import com.msweb.msclubweb.service.WorksService;
+import com.msweb.msclubweb.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -27,6 +27,15 @@ public class TestController {
 
     @Autowired
     WorksService worksService;
+
+    @Autowired
+    ImagsService imagsService;
+
+    //添加图片
+    @PostMapping("/img/add")
+    public Result addImg(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+        return  imagsService.addImg(file);
+    }
 
     //高层管理员部分
     //添加高层信息
@@ -68,7 +77,7 @@ public class TestController {
     @PostMapping("/honor/searchByPage")
     public Result getPageHonor(@RequestBody PageSelect pageSelect) {
         BackPage<Honor> PageMessage=honorService.selectPage(pageSelect);
-        if (PageMessage.getContentList().size()==0) return new Result(500,"查看失败！");
+        if (PageMessage.getContentList().isEmpty()) return new Result(500,"查看失败！");
         else return new Result(200,"查询成功",PageMessage);
     }
 
@@ -117,15 +126,28 @@ public class TestController {
         return new Result(500,"修改失败！");
     }
 
-
     //报名表部分
-    //添加报名信息
+    //添加报名信息(如果学号相同，则点击确定时询问是否修改，确定后根据学号更改数据）
     @PostMapping("/Recruitment/add")
-    public  Result addRecruitment(@RequestBody Recruitment recruitment)
+    public  Result addRecruitment(@RequestBody Recruitment recruitment,String updateKey)
     {
-        int flag=recruitmentService.AddRecruitment(recruitment);
-        if(flag==1) return new Result(200, "添加成功！");
-        return new Result(500,"添加失败!");
+        if(updateKey.equals("Identify the changes"))//先添加再删除（根据原来数据的id）原来的数据
+        {
+            int id=recruitmentService.selectByS_Id(recruitment).getId();
+            int flag=recruitmentService.AddRecruitment(recruitment);
+            if(flag==0) return new Result(500,"修改失败");
+            flag=recruitmentService.deleteById(id);
+            if(flag>0) return new Result(200,"修改成功");
+            return  new Result(500,"系统繁忙");
+        }
+        //将先传来的数据与原有数据对比
+        if(recruitmentService.SearchSame(recruitment)==1) return new Result(200,"数据重复");
+        else
+        {
+            int flag = recruitmentService.AddRecruitment(recruitment);
+            if (flag == 1) return new Result(200, "添加成功！");
+            return new Result(500, "添加失败!");
+        }
     }
 
     //按email删除报名信息
@@ -133,10 +155,15 @@ public class TestController {
     public  Result deleteRecruitmentById(@RequestBody Recruitment recruitment)
     {
         int flag=recruitmentService.deleteByEmail(recruitment);
-        if (flag==1) return new Result(200,"删除成功");
-        else return new Result(500,"删除失败");
+        return flag==1?new Result(200,"删除成功"):new Result(500,"删除失败");
     }
 
+    //按学号删除
+    @PostMapping("/Recruitment/deleteByStudentId")
+    public  Result deleteRecruitmentByStudentId(@RequestBody Recruitment recruitment){
+        int flag=recruitmentService.deleteByS_Id(recruitment);
+        return flag==1? new Result(200,"删除成功"):new Result(500,"删除失败");
+    }
     //获取报名信息
     @PostMapping("/Recruitment/All")
     public  Result getAllRecruitment()
@@ -150,14 +177,20 @@ public class TestController {
     @PostMapping("/Recruitment/selectByEmail")
     public  Result recruitmentSelectByStudent_id(@RequestBody Recruitment recruitment)
     {
-        Recruitment recruitmentMessage=recruitmentService.selectByEmail(recruitment);
+        Recruitment recruitmentMessage=recruitmentService.selectByS_Id(recruitment);
         if(recruitmentMessage.getId()==0) return new Result(500,"查询失败!");
         else return new Result(200,"查询成功",recruitment);
 
     }
 
-
-
+    //模糊查询
+    @PostMapping("/Recruitment/findByKey")
+    public Result recruitmentByKey(@RequestBody PageSelect pageSelect,String key)
+    {
+        BackPage<Recruitment> PageMessage=recruitmentService.selectByKey(pageSelect,key);
+        if(PageMessage.getContentList().isEmpty()) return new Result(500,"查看失败！");
+        else return new Result(200,"查询成功",PageMessage);
+    }
 
     //项目作品部分
     //添加项目作品

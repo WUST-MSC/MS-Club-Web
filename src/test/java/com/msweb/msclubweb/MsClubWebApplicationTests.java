@@ -10,4 +10,9 @@ class MsClubWebApplicationTests {
     void contextLoads() {
     }
 
+    @Test
+    void add(){
+
+    }
+
 }
