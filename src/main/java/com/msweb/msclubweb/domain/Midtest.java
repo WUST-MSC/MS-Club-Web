@@ -9,42 +9,17 @@ import lombok.Data;
 
 /**
  * 
- * @TableName department
+ * @TableName midtest
  */
-@TableName(value ="department")
+@TableName(value ="midtest")
 @Data
-public class Department implements Serializable {
+public class Midtest implements Serializable {
     /**
      * 
      */
-    @TableId(type = IdType.AUTO)
+    @TableId
     private Integer id;
-
-    /**
-     * 
-     */
-    private String briefIntroduction;
-
-    /**
-     * 
-     */
-    private String demand;
-
-    /**
-     * 
-     */
-    private String name;
-
-    /**
-     *
-     */
-    private String src;
-
-    @TableField(exist = false)
-    private Manager manager;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
-
-
 }

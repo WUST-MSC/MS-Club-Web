@@ -13,9 +13,9 @@ import java.util.Map;
 */
 public interface AuthorsService extends IService<Authors> {
     //添加作者返回id
-    Map<String,Object> addAuthor(List<Authors> authorsList);
+    List<Integer> addAuthor(List<Authors> authorsList);
     //查找通过ids
     List<Authors> selectByIds(List<Integer> authorIds);
     //删除通过id
-    int deleteById(List<Integer> authorIds);
+    boolean deleteById(List<Integer> authorIds);
 }

@@ -5,13 +5,13 @@
 <mapper namespace="com.msweb.msclubweb.mapper.NewsMapper">
 
     <resultMap id="NewsResultMap" type="com.msweb.msclubweb.domain.News">
-            <id property="id" column="nid" jdbcType="INTEGER"/>
-            <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
-            <result property="title" column="title" jdbcType="VARCHAR"/>
-            <result property="time" column="time" jdbcType="TIMESTAMP"/>
+            <id property="id" column="n_id" jdbcType="INTEGER"/>
+            <result property="introduction" column="n_introduction" jdbcType="VARCHAR"/>
+            <result property="title" column="n_title" jdbcType="VARCHAR"/>
+            <result property="time" column="n_time" jdbcType="TIMESTAMP"/>
             <collection property="authors" ofType="com.msweb.msclubweb.domain.Authors">
-                <id property="id" column="aid"/>
-                <result property="name" column="aname"/>
+                <id property="id" column="a_id"/>
+                <result property="name" column="a_name"/>
             </collection>
     </resultMap>
 
@@ -20,9 +20,23 @@
         time
     </sql>
     
-    <select id="selectBytime" resultMap="NewsResultMap">
-        select n.id nid,a.id aid,n.time,n.title,n.introduction,a.name aname
-        from news n,authors a,news_author na
-        where n.id = na.news_id and a.id = na.author_id and unix_timestamp(n.time)  = unix_timestamp(#{time})
+    <select id="selectById" resultMap="NewsResultMap">
+        select n.id n_id,a.id a_id,n.time n_time,n.title n_title,n.introduction n_introduction, a.name a_name
+        from news n
+        join news_author na on n.id = na.news_id
+        join authors a on a.id = na.author_id
+        where n.id = #{id}
+    </select>
+<!--    需要-->
+    <select id="selectCurrentPage" resultMap="NewsResultMap">
+        select n.id n_id,n.title n_title,a.name a_name,n.time n_time
+        from news n
+        join news_author na on n.id = na.news_id
+        join authors a on a.id = na.author_id
+        <where>
+            <if test="condition!=null">and n.title like concat('%',#{condition},'%')</if>
+        </where>
+        order by n.id desc
+        limit #{pageSize} offset #{pages}
     </select>
 </mapper>

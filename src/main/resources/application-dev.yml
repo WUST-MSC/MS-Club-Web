@@ -38,6 +38,6 @@ file:
     path: D:\img
 #配置标识符
 identifier:
-  start: "`"
-  end: "+"
+  start: "{[("
+  end: ")]}"
   noExist:

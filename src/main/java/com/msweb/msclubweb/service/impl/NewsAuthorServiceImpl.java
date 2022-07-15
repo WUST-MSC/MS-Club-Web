@@ -61,13 +61,13 @@ public class NewsAuthorServiceImpl extends ServiceImpl<NewsAuthorMapper, NewsAut
     }
 
     @Override
-    public int deleteByNewsId(int newsId) {
+    public boolean deleteByNewsId(int newsId) {
         LambdaQueryWrapper<NewsAuthor> one = new LambdaQueryWrapper<>();
         one.eq(NewsAuthor::getNewsId, newsId);
 
         int delete = newsAuthorMapper.delete(one);
-        if(delete>0) return 200;
-        else return 500;
+        if(delete>0) return true;
+        else return false;
     }
 }
 

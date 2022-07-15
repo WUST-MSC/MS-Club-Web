@@ -6,14 +6,13 @@
 
     <resultMap id="BaseResultMap" type="com.msweb.msclubweb.domain.Department">
             <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="qq" column="qq" jdbcType="VARCHAR"/>
-            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="briefIntroduction" column="brief_introduction" jdbcType="VARCHAR"/>
+            <result property="demand" column="demand" jdbcType="VARCHAR"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="flag" column="flag" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,qq,email,
-        name,flag
+        id,briefIntroduction,demand,
+        name
     </sql>
 </mapper>

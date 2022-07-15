@@ -16,10 +16,12 @@ public interface NewsImagsService extends IService<NewsImags> {
     int addByNewsidAndImagid(int newsid, List<Integer> imgIds);
     //判断是否使用过图片
     boolean selectByNid(int newsid);
+    //判断图片是否被使用过
+    boolean selectByImgId(int imgId);
     //通过newsid找
     List<NewsImags> selectByNewsId(int newsId);
     //通过newsid直接获取imgIds为方便
     List<Integer> selectImgIdsByNewId(int newsId);
     //通过newsid删除
-    int deleteByNewsId(int newsId);
+     boolean deleteByNewsId(int newsId);
 }

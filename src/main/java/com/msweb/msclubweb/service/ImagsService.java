@@ -17,11 +17,12 @@ import java.util.Map;
 public interface ImagsService extends IService<Imags> {
     //添加图片
     Result<Imags> addImg(MultipartFile file);
+    List<Integer> addImgs(List<MultipartFile> files);
     //通过name找id
     Imags selectByName(String imgName);
     //通过names找id
     Map<String,Object> selectByNames(List<String> imgNames);
     //deleteById----removeById,用于删除new时连同删除照片
     //新要求，通过ids批量删除
-    int deleteById(List<Integer> imgIds);
+    boolean deleteByIds(List<Integer> imgIds);
 }

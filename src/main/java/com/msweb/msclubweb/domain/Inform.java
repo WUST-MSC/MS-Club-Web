@@ -34,7 +34,7 @@ public class Inform implements Serializable {
     /**
      * 
      */
-    private String title;
+    private String outline;
 
     /**
      * 

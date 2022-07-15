@@ -45,6 +45,8 @@ public class News implements Serializable {
     @TableField(exist = false)
     private List<Authors> authors;
 
+
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

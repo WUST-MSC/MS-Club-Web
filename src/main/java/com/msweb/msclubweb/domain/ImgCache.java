@@ -9,11 +9,11 @@ import lombok.Data;
 
 /**
  * 
- * @TableName department
+ * @TableName img_cache
  */
-@TableName(value ="department")
+@TableName(value ="img_cache")
 @Data
-public class Department implements Serializable {
+public class ImgCache implements Serializable {
     /**
      * 
      */
@@ -23,28 +23,13 @@ public class Department implements Serializable {
     /**
      * 
      */
-    private String briefIntroduction;
-
-    /**
-     * 
-     */
-    private String demand;
-
-    /**
-     * 
-     */
-    private String name;
+    private String src;
 
     /**
      *
      */
-    private String src;
-
-    @TableField(exist = false)
-    private Manager manager;
+    private Integer imgId;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
-
-
 }

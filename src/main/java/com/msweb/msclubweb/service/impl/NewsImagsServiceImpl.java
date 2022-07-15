@@ -48,6 +48,15 @@ public class NewsImagsServiceImpl extends ServiceImpl<NewsImagsMapper, NewsImags
         }
     }
 
+    //图片是否被使用
+    @Override
+    public boolean selectByImgId(int imgId) {
+        LambdaQueryWrapper<NewsImags> one = new LambdaQueryWrapper<>();
+        one.eq(NewsImags::getImagId,imgId);
+        List<NewsImags> newsImags = newsImagsMapper.selectList(one);
+        return newsImags.size()>0?true:false;
+    }
+
     //通过newsid找到对应imagid
     @Override
     public List<NewsImags> selectByNewsId(int newsId) {
@@ -73,13 +82,13 @@ public class NewsImagsServiceImpl extends ServiceImpl<NewsImagsMapper, NewsImags
 
     //用于在删除新闻时删除对应图片（在判断完）
     @Override
-    public int deleteByNewsId(int newsId) {
+    public boolean deleteByNewsId(int newsId) {
         LambdaQueryWrapper<NewsImags> one = new LambdaQueryWrapper<>();
         one.eq(NewsImags::getNewsId, newsId);
 
         int delete = newsImagsMapper.delete(one);
-        if(delete>0) return 200;
-        else return 500;
+        if(delete>0) return true;
+        else return false;
     }
 }
 

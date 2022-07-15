@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.msweb.msclubweb.common.Result;
 import com.msweb.msclubweb.domain.Imags;
+import com.msweb.msclubweb.domain.ImgCache;
 import com.msweb.msclubweb.domain.Inform;
 import com.msweb.msclubweb.service.ImagsService;
 import com.msweb.msclubweb.mapper.ImagsMapper;
+import com.msweb.msclubweb.service.ImgCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,9 @@ public class ImagsServiceImpl extends ServiceImpl<ImagsMapper, Imags>
     implements ImagsService{
     @Autowired
     private ImagsMapper imagsMapper;
+    @Autowired
+    private ImgCacheService imgCacheService;
+
     @Value("${file.upload.path}")
     private String path;
 
@@ -54,10 +59,67 @@ public class ImagsServiceImpl extends ServiceImpl<ImagsMapper, Imags>
         }
         //存入数据库
         Imags imags = new Imags();
-        imags.setSrc(path+"/"+fileName);
+        imags.setSrc(path+"\\"+fileName);
         imags.setName(date);//以时间戳为名字
         int insert = imagsMapper.insert(imags);
+        //添加缓存
+        ImgCache imgCache = new ImgCache();
+        imgCache.setImgId(imags.getId());
+        imgCache.setSrc(imags.getSrc());
+        imgCacheService.addCache(imgCache);
         return insert==0?Result.sqlError():Result.success(null);
+    }
+
+    /**
+     * 添加新闻第一步：添加图片
+     * @param files
+     * @return
+     */
+    @Override
+    public List<Integer> addImgs(List<MultipartFile> files) {
+        ArrayList<Integer> imgIds = new ArrayList<>();
+        //如果指定目录不存在，则创建目录
+        File filePath = new File(path);
+        if(!filePath.exists() && !filePath.isDirectory()){
+            filePath.mkdir();
+        }
+        for(int i = 0;i<files.size();i++){
+            String originalFileName = files.get(i).getOriginalFilename();
+            String type = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+            String fileName = i + "." + type;
+            File targetFile = new File(path,fileName);
+            try{
+                files.get(i).transferTo(targetFile);
+            }catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+            Imags imags = new Imags();
+            imags.setSrc(path+"/"+fileName);
+            imags.setName(String.valueOf(i+1));
+            imagsMapper.insert(imags);
+            imgIds.add(imags.getId());
+        }
+        return imgIds;
+        /*String originalFileName = file.getOriginalFilename();
+        String type = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String date = sdf.format(d);
+        String fileName = date  + "." +type;
+        File targetFile = new File(path,fileName);
+        //将文件保存到服务器指定位置
+        try{
+            file.transferTo(targetFile);
+        }catch (IOException e) {
+            e.printStackTrace();
+            return Result.sqlError();
+        }
+        //存入数据库
+        Imags imags = new Imags();
+        imags.setSrc(path+"/"+fileName);
+        imags.setName(date);//以时间戳为名字
+        int insert = imagsMapper.insert(imags);*/
     }
 
     @Override
@@ -95,12 +157,12 @@ public class ImagsServiceImpl extends ServiceImpl<ImagsMapper, Imags>
     }
 
     @Override
-    public int deleteById(List<Integer> imgIds) {
+    public boolean deleteByIds(List<Integer> imgIds) {
         for(int i = 0;i<imgIds.size();i++){
             int flag = imagsMapper.deleteById(imgIds.get(i));
-            if(flag!=1) return 500;
+            if(flag==0) return false;
         }
-        return 200;
+        return true;
     }
 
 }

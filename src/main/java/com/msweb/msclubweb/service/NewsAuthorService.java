@@ -18,5 +18,5 @@ public interface NewsAuthorService extends IService<NewsAuthor> {
     List<NewsAuthor> selectByNewsId(int newsId);
     List<Integer> selectAuthorIdsByNewsId(int newsId);
     //通过newsid删除
-    int deleteByNewsId(int newsId);
+    boolean deleteByNewsId(int newsId);
 }

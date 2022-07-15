@@ -15,11 +15,12 @@ import java.util.Map;
 */
 public interface NewsService extends IService<News> {
     //添加新闻 返回newsId
-    int addNews(News news);
+    //int addNews(News news);
+    Result<News> addNews(News news);
     //删除新闻
-    int deleteNews(News news);
+    Result<News> deleteById(Integer id);
     //查看新闻
-    Result<News> selectByTime(News news);
+    Result<News> selectById(Integer id);
     //4.分页模糊查询公告
-    Map<String,Object> selectPage(long currentPage, long pageSize, News news);
+    Map<String,Object> selectPage(Long currentPage, Long pageSize, String condition);
 }

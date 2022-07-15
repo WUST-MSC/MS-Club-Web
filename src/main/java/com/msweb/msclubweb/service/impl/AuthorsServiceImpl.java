@@ -1,5 +1,6 @@
 package com.msweb.msclubweb.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.msweb.msclubweb.domain.Authors;
 import com.msweb.msclubweb.service.AuthorsService;
@@ -24,22 +25,20 @@ public class AuthorsServiceImpl extends ServiceImpl<AuthorsMapper, Authors>
     private AuthorsMapper authorsMapper;
 
     @Override
-    public Map<String, Object> addAuthor(List<Authors> authorsList) {
-        HashMap<String, Object> map = new HashMap<>();
+    public List<Integer> addAuthor(List<Authors> authorsList) {
         ArrayList<Integer> authorIds = new ArrayList<>();
-
         for(int i = 0;i<authorsList.size();i++){
-            int insert = authorsMapper.insert(authorsList.get(i));
-            if(insert!=1){
-                map.put("code","500");
-                return map;
+            LambdaQueryWrapper<Authors> one = new LambdaQueryWrapper<>();
+            one.eq(Authors::getName,authorsList.get(i).getName());
+            Authors authors = authorsMapper.selectOne(one);
+            if(authors==null){//该作者不存在
+                authorsMapper.insert(authorsList.get(i));
+                authorIds.add(authorsList.get(i).getId());
+            }else{//作者已存在
+                authorIds.add(authors.getId());
             }
-            //获取id
-            authorIds.add(authorsList.get(i).getId());
         }
-        map.put("code",200);
-        map.put("authorIds",authorIds);
-        return map;
+        return authorIds;
     }
 
     @Override
@@ -53,12 +52,12 @@ public class AuthorsServiceImpl extends ServiceImpl<AuthorsMapper, Authors>
     }
 
     @Override
-    public int deleteById(List<Integer> authorIds) {
+    public boolean deleteById(List<Integer> authorIds) {
         for(int i = 0;i<authorIds.size();i++){
             int flag = authorsMapper.deleteById(authorIds.get(i));
-            if(flag!=1) return 500;
+            if(flag!=1) return false;
         }
-        return 200;
+        return true;
     }
 }
 
